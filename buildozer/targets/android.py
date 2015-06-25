@@ -643,6 +643,14 @@ class TargetAndroid(Target):
         else:
             build_cmd += ' release'
             mode = 'release-unsigned'
+
+        # resources (to be add to res/strings.xml)
+        resource = config.getlistvalues('app', 'android.resource', [])
+        for res in resource:
+            key, value = res.split('=', 1)
+            res = '{}={}'.format(key.strip(), value.strip())
+            build_cmd += ' --resource "{}"'.format(res)
+
         self.buildozer.cmd(build_cmd, cwd=dist_dir)
 
         # XXX found how the apk name is really built from the title
